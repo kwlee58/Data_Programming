@@ -1,7 +1,7 @@
 ---
 title: "Quetelet's Body Mass Index with rn96 data"
 author: "coop711"
-date: "`r Sys.Date()`"
+date: "2017-03-10"
 output: html_document
 ---
 
@@ -180,24 +180,28 @@ qqnorm(BMI)
 
 ```{r, save and history}
 ls()
-save("rn96", "BMI", file = "./rn96_1.rda")
-save(list = c("rn96", "BMI"), file = "./rn96_2.rda")
-save(list = ls(), file = "./rn96_3.rda")
-save.image(file = "./rn96_4.rda")
+save("rn96", "BMI", 
+     file = "./rn96_1.RData")
+save(list = c("rn96", "BMI"), 
+     file = "./rn96_2.RData")
+save(list = ls(), 
+     file = "./rn96_3.RData")
+save.image(file = "./rn96_4.RData")
 rm(list = ls())
 ls()
-load("./rn96_1.rda")
+load("./rn96_1.RData")
 ls()
 rm(list = ls())
 ls()
-load("./rn96_2.rda")
+load("./rn96_2.RData")
 ls()
 rm(list = ls())
 ls()
-load("./rn96_3.rda")
+load("./rn96_3.RData")
 ls()
 rm(list = ls())
-load("./rn96_4.rda")
+ls()
+load("./rn96_4.RData")
 ls()
 # savehistory(file = "./rn96.Rhistory")
 ```
