@@ -10,19 +10,24 @@ output: html_document
 ### From Stigler's
 
 ```{r, packages, echo = FALSE}
-# install.packages(c("pander", "ggplot2"), repos = "https://cran.rstudio.com")
-# library(pander)
-library(knitr)
+#install.packages(c("pander", "ggplot2"), repos = "https://cran.rstudio.com")
+#library(pander)
+#library(knitr)
 # search()
 ```
 
+* html markup 활용방법
+
 <img src = "../pics/quetelet_soldiers.png" width = "480"/>
+
+* `knitr` 패키지의 `include_graphics()` 이용
 
 `r knitr::include_graphics("../pics/quetelet_soldiers.png", dpi = 150)`
 
-<!--
+* `markdown` 이용
+
 ![Quetelet's frequency table](../pics/quetelet_soldiers.png)
--->
+
 
 ### Frequency Table
 
@@ -94,6 +99,7 @@ barplot(chest_table$Freq/total,
 
 ```{r, long format data frame}
 chest_long <- rep(chest_table$Chest, chest_table$Freq)
+table(chest_long)
 str(chest_long)
 ```
 
@@ -164,7 +170,7 @@ list(breaks = h_chest.2$breaks,
 
 ```{r, annotations, fig.width = 8, fig.height = 4.5}
 main_title <- "Fitting Normal Distribution"
-# sub_title <- "Chest Circumferences of Scottish Soldiers"
+sub_title <- "Chest Circumferences of Scottish Soldiers"
 sub_title <- ""
 x_lab <- "Chest Circumferences (inches)"
 y_lab <- "Proportion"
@@ -208,10 +214,7 @@ y <- h_chest.2$density[6:10]
 * 5개의 직사각형으로 파악하고 향후 면적 계산을 쉽게 하기 위하여 다음과 같이 좌표 설정
 
 ```{r, 5 rectangles, fig.width = 8, fig.height = 4.5}
-x_coord <- rep(c(x_lower, 
-                 38.5:41.5, 
-                 x_upper), 
-               each = 2)
+x_coord <- rep(c(x_lower, 38.5:41.5,x_upper),  each = 2)
 y_coord <- c(0, rep(y, each = 2), 0)
 poly_df <- data.frame(x = x_coord, 
                       y = y_coord)
@@ -227,7 +230,9 @@ abline(v = c(x_lower, x_upper),
        col = "red")
 # polygon(x_coord, y_coord, density = 20)
 polygon(poly_df, 
-        density = 20)
+        density = 10,
+        angle = 30,
+        col = "blue")
 ```
 
 * 이론적으로 빗금친 부분의 면적은 `pnorm(1) - pnorm(-1) = ``r pnorm(1) - pnorm(-1)`에 가까울 것으로 예상. 5개 직사각형의 면적을 구하여 합하는 과정은 다음과 같음.
@@ -246,14 +251,36 @@ sum(diff(x_area) * y)
 *  이론적인 정규분포 밀도함수 곡선을 히스토그램에 덧붙여 그림.
 
 ```{r, normal curve added, fig.width = 8, fig.height = 4.5}
-x.chest <- seq(32.5, 48.5, length = 1000)
-y.norm <- dnorm(x.chest, mean = mean_chest, sd = sd_chest)
-hist(chest_long, breaks = 32.5:48.5, probability = TRUE, main = main_title, sub = sub_title, xlab = x_lab, ylab = y_lab)
-abline(v = c(x_lower, x_upper), lty = 2, col = "red")
+x_chest <- seq(from = 32.5, 
+               to = 48.5, 
+#               by = 0.01,
+#               length.out = 1000,
+               along.with = chest_long)
+# x_chest <- seq.along(chest_long)
+y_norm <- dnorm(x_chest, 
+                mean = mean_chest, 
+                sd = sd_chest)
+curve_df <- data.frame(x = x_chest, 
+                       y = y_norm)
+hist(chest_long, 
+     breaks = 32.5:48.5, 
+     probability = TRUE, 
+     main = main_title, 
+     sub = sub_title, 
+     xlab = x_lab, 
+     ylab = y_lab)
+abline(v = c(x_lower, x_upper), 
+       lty = 2, 
+       col = "red")
 # abline(v = c(38, 42), lty = 2, col = "red")
-polygon(poly_df, density = 20)
+polygon(poly_df, 
+        density = 20)
 # polygon(x_coord, y_coord, density = 20)
-lines(x.chest, y.norm, col = "red")
+# lines(x = x_chest, 
+#      y = y_norm, 
+#      col = "blue")
+lines(curve_df,
+      col = "blue")
 ```
 
 ### Changing tick marks of x axis
@@ -261,12 +288,25 @@ lines(x.chest, y.norm, col = "red")
 * default로 주어지는 $x$축의 눈금을 제대로 볼 수 있게 고치려면,
 
 ```{r, x axis, fig.width = 8, fig.height = 4.5}
-hist(chest_long, breaks = 32.5:48.5, probability = TRUE, main = main_title, sub = sub_title, xlab = x_lab, ylab = y_lab, axes = FALSE)
-abline(v = c(x_lower, x_upper), lty = 2, col = "red")
-polygon(poly_df, density = 20)
+hist(chest_long, 
+     breaks = 32.5:48.5, 
+     probability = TRUE, 
+     main = main_title, 
+     sub = sub_title, 
+     xlab = x_lab, 
+     ylab = y_lab, 
+     axes = FALSE)
+abline(v = c(x_lower, x_upper), 
+       lty = 2, 
+       col = "red")
+polygon(poly_df, 
+        density = 20)
 # polygon(x_coord, y_coord, density = 20)
-lines(x.chest, y.norm, col = "red")
-axis(side = 1, at = seq(32, 48, by = 2), labels = seq(32, 48, by = 2))
+lines(curve_df,
+      col = "red")
+axis(side = 1, 
+     at = seq(32, 48, by = 2), 
+     labels = seq(32, 48, by = 2))
 axis(side = 2)
 ```
 
@@ -279,23 +319,38 @@ axis(side = 2)
 ```{r, ggplots, fig.width = 8, fig.height = 4.5}
 library(ggplot2)
 # theme_update(plot.title = element_text(hjust = 0.5)) 
-g0 <- ggplot(data = data.frame(chest_long), mapping = aes(x = chest_long)) 
-(g1 <- g0 +
-  stat_bin(aes(y = ..density..), binwidth = 1, fill = "white", colour = "black"))
+g0 <- ggplot(data = data.frame(chest_long), 
+             mapping = aes(x = chest_long)) 
+g0
+# (g1 <- g0 +
+#   stat_bin(aes(y = ..density..), 
+#            binwidth = 1, 
+#           fill = "white",
+#           colour = "black"))
 # (g1 <- g0 + 
-#  stat_count(fill = "white", colour = "black"))
+#     stat_count(fill = "white", 
+#                colour = "black"))
 # (g1 <- g0 + 
-#  geom_histogram(aes(y = ..density..), binwidth = 1, fill = "white", colour = "black"))
-# (g1 <- g0 + 
-#  geom_histogram(aes(y = ..density..), binwidth = 1, breaks = 32.5:48.5, fill = "white", colour = "black"))
-
+#   geom_histogram(aes(y = ..density..),
+#                  binwidth = 1, 
+#                  fill = "white", 
+#                  colour = "black"))
+(g1 <- g0 + 
+    geom_histogram(aes(y = ..density..),
+                   binwidth = 1, 
+                   breaks = 32.5:48.5, 
+                   fill = "white", 
+                   colour = "black"))
+# g1
 ```
 
 ####  Mean $\pm$ SD 
 
 ```{r, mean plus minus sd, fig.width = 8, fig.height = 4.5}
 (g2 <- g1 + 
-   geom_vline(xintercept = c(x_lower, x_upper), linetype = "dotted", colour = "red")) 
+   geom_vline(xintercept = c(x_lower, x_upper), 
+              linetype = "dotted", 
+              colour = "red")) 
 ```
 
 #### x-axis label and main title
@@ -306,36 +361,43 @@ g0 <- ggplot(data = data.frame(chest_long), mapping = aes(x = chest_long))
 #   xlab(x_lab) + 
 #   ylab(y_lab) +
 #   ggtitle(main_title) +
-   labs(x = x_lab, y = y_lab, title = main_title) + 
-   theme(plot.title = element_text(hjust = 0.5)))
+   labs(x = x_lab, 
+        y = y_lab, 
+        title = main_title) +
+  theme(plot.title = element_text(hjust = 0.5)))
 ```
 
 #### Shading the area
 
 ```{r, polygon, fig.width = 8, fig.height = 4.5}
 (g4 <- g3 + 
-   geom_polygon(data = poly_df, mapping = aes(x = x, y = y), alpha = 0.5, fill = "grey"))
+   geom_polygon(data = poly_df, 
+                mapping = aes(x = x, y = y),
+                alpha = 0.2, 
+                fill = "red"))
 ```
 
 #### Normal curve added
 
 ```{r, normal curve, fig.width = 8, fig.height = 4.5}
-# x.curve <- seq(32.5, 48.5, length = 100)
-# y.curve <- dnorm(x.curve, mean = mean_chest, sd = sd_chest)
-curve.df <- data.frame(x = x.chest, y = y.norm)
 (g5 <- g4 + 
-  geom_line(data = curve.df, mapping = aes(x = x, y = y), colour = "blue"))
+  geom_line(data = curve_df, 
+            mapping = aes(x = x, y = y),
+            colour = "blue"))
 ```
 
 #### x-axis tick marks 
 
 ```{r, tick marks, fig.width = 8, fig.height = 4.5}
 (g6 <- g5 + 
-   scale_x_continuous(breaks = seq(32, 48, by = 2), labels = seq(32, 48, by = 2)))
+   scale_x_continuous(name = "Chest (inches)",
+                      breaks = seq(32, 48, by = 2), 
+                      labels = seq(32, 48, by = 2)))
 ```
 
 ### Save
 
 ```{r, save}
+# save(list = ls(), file = "./Quetelet_chest.RData")
 save.image(file = "./Quetelet_chest.RData")
 ```
