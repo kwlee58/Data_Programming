@@ -1,0 +1,62 @@
+---
+title: "Student 3000 Criminal Data : Test"
+author: "coop711"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include = FALSE, echo = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+options(width = 180)
+```
+
+### Data Loading
+
+```{r, data}
+load("./crimtab.RData")
+str(crimtab.long.df)
+```
+
+Quetelet의 가슴둘레 자료에서 살핀 바와 같이 이 자료를 그대로 ad.test 등에 적용하면 매우 작은 p-value 가 예상됨.
+
+```{r, Anderson-Darling test}
+# install.packages("nortest", repos = "https://cran.rstudio.com")
+library(nortest)
+# ad.test(crimtab.long.df[, 1])
+# ad.test(crimtab.long.df[, 2])
+sapply(crimtab.long.df, ad.test)
+```
+
+`height`의 경우 인치 단위로 측정한 자료임. 이 점에 유의하여 원 자료의 모습에 가깝게 noise 를 넣기 위하여 생성
+
+```{r, histogram of noise}
+set.seed(240602)
+r.noise <- runif(3000) - 0.5
+hist(r.noise, prob = TRUE, xlim = c(-0.5, 0.5), ylim = c(0, 1.5))
+```
+
+noise를 넣어 test 수행
+
+```{r, tests with noise}
+crimtab.long.df.noise <- crimtab.long.df
+crimtab.long.df.noise[, "finger"] <- crimtab.long.df[, "finger"] + r.noise/10
+hist(crimtab.long.df.noise[, "finger"], prob = TRUE, nclass = 42)
+qqnorm(crimtab.long.df.noise[, "finger"])
+crimtab.long.df.noise[, "height"] <- crimtab.long.df[, "height"] + r.noise
+hist(crimtab.long.df.noise[, "height"], prob = TRUE, nclass = 22)
+qqnorm(crimtab.long.df.noise[, "height"])
+kable(sapply(crimtab.long.df.noise, ad.test))
+kable(sapply(crimtab.long.df.noise, cvm.test))
+kable(sapply(crimtab.long.df.noise, lillie.test))
+# ad.test(crimtab.long.df[, 2] + r.noise)
+# cvm.test(crimtab.long.df[, 2] + r.noise)
+# lillie.test(crimtab.long[,2]+r.noise)
+# ad.test(crimtab.long[, 1] + r.noise/10)
+# cvm.test(crimtab.long[, 1] + r.noise/10)
+# lillie.test(crimtab.long[, 1] + r.noise/10)
+```
+
+```{r, save}
+save.image("./crimtab_test.RData")
+```
