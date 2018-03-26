@@ -260,6 +260,8 @@ f1 + geom_histogram(aes(y = ..density..),
 (g.h <- g.h.1 +
     theme_bw() +
     scale_x_continuous(name = "", 
+                       breaks = NULL) +
+  scale_y_continuous(name = "", 
                        breaks = NULL))
 ```
 
@@ -275,6 +277,8 @@ f1 + geom_histogram(aes(y = ..density..),
 (g.f <- g.f.1 +
     theme_bw() +
     scale_x_continuous(name = "", 
+                       breaks = NULL) +
+  scale_y_continuous(name = "", 
                        breaks = NULL) +
     coord_flip())
 ```
