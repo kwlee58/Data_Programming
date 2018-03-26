@@ -5,20 +5,30 @@ date: "`r Sys.Date()`"
 output: html_document
 ---
 
-### Structure of Data
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+```
 
-W. S. Gosset 이 t-분포를 유도하느라고 모의실험에 활용한 자료는 다음과 같음.
+## Biometrika 1908
+
+`r include_graphics("../pics/biometrika_1908.png")`
+
+## Structure of Data
+
+"Student": William. S. Gosset(1876 ~ 1937)이 t-분포를 유도하기 위하여 모의실험에 활용한 자료는 다음과 같다.
 
 ```{r, crimtab}
-options(width = 90)
+options(width = 80)
 crimtab
 str(crimtab)
 ```
 
-자료구조에서 살필 수 있다시피 손가락 길이와 키를 계급으로 나누고 손가락 길이와 키의 조합을 이름으로 갖는 `table`임. 각 cell의 값은 길이와 키의 조합이 나타나는 빈도임. 여기서 키를 인치 단위로 환원하면 어떤 모양이 드러나는지 살펴보자. 
+자료구조에서 살필 수 있다시피 손가락 길이와 키를 계급으로 나누고 손가락 길이와 키의 조합을 이름으로 갖는 `table`이다. 각 cell의 값은 길이와 키의 조합이 나타나는 빈도이다. 여기서 키를 인치 단위로 환원하면 어떤 모양이 드러나는지 살펴보자. 
 cm 단위로 되어 있는 키의 계급을 인치 단위로 변환하면 숨어있던 자료구조가 드러난다.
+(1인치 = 2.54cm)
 
-이러한 table 구조의 행과 열에 이름을 붙이려면, `list`를 사용한다.`dimnames`설정 과정에서 `list(finger = ..., height = ...)` 같은 방법으로 이름을 부여할 경우와 그렇지 않을 때 차이가 무엇인지 익혀 두자.
+이러한 `table`구조의 행과 열에 이름을 붙이려면, `list`를 사용한다.`dimnames`설정 과정에서 `list(finger = ..., height = ...)` 같은 방법으로 이름을 부여할 경우와 그렇지 않을 때 차이가 무엇인지 알아 두자.
 
 ```{r, viewing the real data structure}
 crimtab_2 <- crimtab
@@ -29,9 +39,11 @@ crimtab_2
 str(crimtab_2)
 ```
 
-<P style = "page-break-before:always">
+<!--
+<P style = "page-break-after:always">
+-->
 
-### Data Frame 변환
+## Data Frame 변환
 
 글자 속성을 갖는 손가락 길이와 키의 조합에 따른 빈도를 또 다른 변수로 갖는 `data frame`으로 변환하고 이를 다시 `long format` 으로 전환하는 과정은 다음과 같음.
 
@@ -67,19 +79,19 @@ str(crimtab_long)
 long format 으로 변환하는 다른 방법 1
 
 ```{r, alternative implementation 1}
-# finger.long <- rep(crimtab_df$finger, crimtab_df$Freq)
-# height.long <- rep(crimtab_df$height, crimtab_df$Freq)
-# crimtab_long_df <- data.frame(finger = finger.long, height = height.long)
+# finger_long <- rep(crimtab_df$finger, crimtab_df$Freq)
+# height_long <- rep(crimtab_df$height, crimtab_df$Freq)
+# crimtab_long_df <- data.frame(finger = finger_long, height = height_long)
 # str(crimtab_long_df)
 ```
 
 long format 으로 변환하는 다른 방법 2
 
 ```{r, alternative implementation 2}
-# index.crimtab <- rep(1:nrow(crimtab_df), crimtab_df[, "Freq"])
-# index.crimtab[1:10]
-# crimtab_df.long <- crimtab_df[index.crimtab, c("finger", "height")]
-# str(crimtab_df.long)
+# index_crimtab <- rep(1:nrow(crimtab_df), crimtab_df[, "Freq"])
+# index_crimtab[1:10]
+# crimtab_df_long<- crimtab_df[index_crimtab, c("finger", "height")]
+# str(crimtab_df_long)
 ```
 
 matrix 를 data frame으로 변환

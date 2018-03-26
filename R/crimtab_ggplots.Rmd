@@ -224,7 +224,7 @@ g3
 
 ```{r, fig.width = 8, fig.height = 4}
 h1 <- ggplot(data = crimtab_long_df, 
-             aes(x = height)) 
+             mapping = aes(x = height)) 
 h1 + geom_histogram(alpha = 0.5)
 ```
 
@@ -232,7 +232,7 @@ h1 + geom_histogram(alpha = 0.5)
 
 ```{r, fig.width = 8, fig.height = 4}
 f1 <- ggplot(data = crimtab_long_df, 
-             aes(x = finger))
+             mapping = aes(x = finger))
 f1 + geom_histogram(alpha = 0.5)
 ```
 
@@ -250,37 +250,37 @@ f1 + geom_histogram(aes(y = ..density..),
 
 ```{r, fig.width = 8, fig.height = 4}
 (g.h.1 <- h1 + 
-    geom_histogram(aes(y = ..density..), 
-                   binwidth = 1, 
-                   fill = "white", 
-                   colour = "black"))
+   geom_histogram(aes(y = ..density..), 
+                  binwidth = 1, 
+                  fill = "white", 
+                  colour = "black"))
 ```
 
 ```{r, fig.width = 8, fig.height = 4}
 (g.h <- g.h.1 +
-    theme_bw() +
-    scale_x_continuous(name = "", 
-                       breaks = NULL) +
-  scale_y_continuous(name = "", 
-                       breaks = NULL))
+   theme_bw() +
+   scale_x_continuous(name = "", 
+                      breaks = NULL) +
+   scale_y_continuous(name = "", 
+                      breaks = NULL))
 ```
 
 ```{r, fig.width = 8, fig.height = 4}
 (g.f.1 <- f1 + 
-    geom_histogram(aes(y = ..density..), 
-                   binwidth = 0.2, 
-                   fill = "white", 
-                   colour = "black"))
+   geom_histogram(aes(y = ..density..), 
+                  binwidth = 0.2, 
+                  fill = "white", 
+                  colour = "black"))
 ```
 
 ```{r, fig.width = 8, fig.height = 4}
 (g.f <- g.f.1 +
-    theme_bw() +
-    scale_x_continuous(name = "", 
-                       breaks = NULL) +
-  scale_y_continuous(name = "", 
-                       breaks = NULL) +
-    coord_flip())
+   theme_bw() +
+   scale_x_continuous(name = "", 
+                      breaks = NULL) +
+   scale_y_continuous(name = "", 
+                      breaks = NULL) +
+   coord_flip())
 ```
 
 <P style = "page-break-before: always">
@@ -323,14 +323,14 @@ y_height <- dnorm(x_height,
 
 ```{r, fig.width = 8, fig.height = 4}
 (g.h.3 <- g.h.2 + 
-    theme_bw())
+   theme_bw())
 ```
 
 <P style = "page-break-before: always">
 
 ```{r, fig.width = 8, fig.height = 4}
 (g.h.4 <- g.h.3 + 
-    geom_line(aes(x = x_height, y = y_height)))
+   geom_line(aes(x = x_height, y = y_height)))
 ```
 
 <!--
@@ -339,19 +339,19 @@ y_height <- dnorm(x_height,
 
 ```{r, fig.width = 8, fig.height = 4}
 (g.f.2 <- g.f.1 + 
-    annotate("segment", 
-             x = mean_finger, 
-             xend = mean_finger, 
-             y = -0.1, 
-             yend = 0, 
-             arrow = arrow(length = unit(0.3, "cm"))))
+   annotate("segment", 
+            x = mean_finger, 
+            xend = mean_finger, 
+            y = -0.1, 
+            yend = 0, 
+            arrow = arrow(length = unit(0.3, "cm"))))
 ```
 
 <P style = "page-break-before: always">
 
 ```{r, fig.width = 8, fig.height = 4}
 (g.f.3 <- g.f.2 + 
-    theme_bw())
+   theme_bw())
 ```
 
 <!--
@@ -360,7 +360,7 @@ y_height <- dnorm(x_height,
 
 ```{r, fig.width = 8, fig.height = 4}
 (g.f.4 <- g.f.3 + 
-    geom_line(aes(x = x_finger, y = y_finger)))
+   geom_line(aes(x = x_finger, y = y_finger)))
 ```
 
 <P style = "page-break-before: always">
