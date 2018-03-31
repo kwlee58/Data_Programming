@@ -1,5 +1,5 @@
 ---
-title: "Crimtab Data for Simulation of T-Distribution"
+title: "Crimtab Data (with noise) for Simulation of T-Distribution"
 author: "coop711"
 date: "`r Sys.Date()`"
 output: html_document
@@ -11,7 +11,7 @@ output: html_document
 load("./crimtab_test.RData")
 ls()
 ls.str()
-head(crimtab.long.df.noise, n = 10)
+head(crimtab_long_df_noise, n = 10)
 ```
 
 ### Student 의 Simulation 재현
@@ -20,22 +20,22 @@ head(crimtab.long.df.noise, n = 10)
  
 ```{r, suffling}
 # set.seed(113)
-crimtab.shuffle.noise <- crimtab.long.df.noise[sample(1:3000), ]
-head(crimtab.shuffle.noise, n = 10)
+crimtab_shuffle_noise <- crimtab_long_df_noise[sample(1:3000), ]
+head(crimtab_shuffle_noise, n = 10)
 ```
 
 표본의 크기가 4인 750개의 표본을 만드는 작업은 `rep()` 이용.
 
 ```{r, 750 samples of size 4}
-sample.id <- as.factor(rep(1:750, each = 4))
-head(sample.id, n = 10)
+sample_id <- as.factor(rep(1:750, each = 4))
+head(sample_id, n = 10)
 ```
 
 각 표본의 평균과 표준편차 계산에는 `tapply()` 이용. 
 
 ```{r, sample mean and sd}
-finger.sample.mean <- tapply(crimtab.shuffle.noise[, "finger"], sample.id, mean)
-finger.sample.sd <- tapply(crimtab.shuffle.noise[, "finger"], sample.id, sd)
+finger.sample.mean <- tapply(crimtab_shuffle_noise[, "finger"], sample_id, mean)
+finger.sample.sd <- tapply(crimtab_shuffle_noise[, "finger"], sample_id, sd)
 str(finger.sample.mean)
 str(finger.sample.sd)
 head(cbind(finger.sample.mean, finger.sample.sd), n = 10)
@@ -44,7 +44,7 @@ head(cbind(finger.sample.mean, finger.sample.sd), n = 10)
 t-통계량 계산. Student는 표준편차 계산에서 분모에 $n$을 사용하고 히스토그램을 그려 비교하였으나 자유도 3인 t-분포와 비교하기 위하여 $t=\frac{\bar{X_n}-\mu}{\hat{SD}/\sqrt{n}}$을 계산함. (여기서 $\hat{SD}$는 표본 표준편차)
 
 ```{r, t stats}
-sample.t <- (finger.sample.mean - mean(crimtab.long.df.noise[, "finger"]))/(finger.sample.sd/sqrt(4))
+sample.t <- (finger.sample.mean - mean(crimtab_long_df_noise[, "finger"]))/(finger.sample.sd/sqrt(4))
 str(sample.t)
 ```
 
