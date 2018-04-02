@@ -16,7 +16,7 @@ library(knitr)
 library(pander)
 # install.packages("HistData", repos = "http://cran.rstudio.com")
 library(HistData)
-ZeaMays
+pander(ZeaMays)
 str(ZeaMays)
 ```
 <P style = "page-break-before:always">
