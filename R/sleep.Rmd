@@ -175,7 +175,7 @@ kable(sapply(sleep_wide, ad.test))
 library(ggplot2)
 library(grid)
 (g1 <- ggplot(data = sleep_wide) +
-  theme_bw())
+    theme_bw())
 ```
 
 <P style = "page-break-before: always">
