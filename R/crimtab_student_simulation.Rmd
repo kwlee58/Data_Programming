@@ -12,7 +12,7 @@ load("./crimtab.RData")
 ls()
 ls.str()
 head(crimtab_long_df, 
-     n = 10)
+     n = 20)
 ```
 
 <P style = "page-break-before:always">
@@ -30,7 +30,7 @@ head(crimtab_shuffle,
      n = 10)
 ```
 
-표본의 크기가 4인 750개의 표본을 만드는 작업은 `rep()` 이용.
+각 표본의 크기가 4인 750개의 표본을 만드는 작업은 `rep()` 이용.
 
 ```{r, 750 samples of size 4}
 sample_id <- as.factor(rep(1:750, each = 4))

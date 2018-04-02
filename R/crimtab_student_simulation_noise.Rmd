@@ -8,7 +8,7 @@ output: html_document
 ### Data Loading
 
 ```{r, data loading}
-load("./crimtab_test.RData")
+load("./crimtab_noise.RData")
 ls()
 ls.str()
 head(crimtab_long_df_noise, n = 10)
