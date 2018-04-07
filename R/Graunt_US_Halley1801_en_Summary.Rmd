@@ -1,5 +1,5 @@
 ---
-title: "Graunt, Halley, and US 1993 Life Table"
+title: "Graunt, Halley, and US 1993 Life Table : Summary"
 author: "coop711"
 date: '`r Sys.Date()`'
 output: html_document
