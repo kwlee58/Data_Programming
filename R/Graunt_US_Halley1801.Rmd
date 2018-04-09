@@ -41,8 +41,8 @@ us93["xPo_us"]$xPo
 us93[2]
 us93[2][[1]]
 us93[2]$xPo_us
-us93[, "xPo_us"]
-us93[, 2]
+us93[ , "xPo_us"]
+us93[ , 2]
 us93$xPo_us
 us93$xPo
 ```
@@ -56,7 +56,7 @@ Combine two data frames into one single data frame, compare the results.
 ```{r one data frmae}
 (graunt_us <- data.frame(graunt, xPo_us = us93$xPo))
 (graunt_us_2 <- data.frame(graunt, us93[2]))
-(graunt_us_2 <- data.frame(graunt, us93[, 2]))
+(graunt_us_3 <- data.frame(graunt, us93[, 2]))
 ```
 
 ### Life Expectancy
@@ -75,7 +75,7 @@ $E(X) = E\{F^{-1}(U)\} = \int_{0}^{1} F^{-1}(u)du = \int_0^{\infty} 1-F(x) dx = 
 
 ```{r, first plot, fig.width = 9, fig.height = 9}
 par(mfrow = c(2, 2))
-plot(graunt$x, graunt$xPo)
+plot(x = graunt$x, y = graunt$xPo)
 plot(xPo_g ~ x, data = graunt)
 plot(graunt)
 plot(graunt, ann = FALSE, xaxt = "n", yaxt = "n", type = "b")
