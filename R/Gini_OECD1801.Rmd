@@ -7,11 +7,18 @@ output: html_document
  
 ## Data 작업
 
-* OECD 국가들의 Gini계수 읽어들이기. 세전과 세후로 구분. 자료구조로 인하여 `sep="\t"`을 사용한 것에 유의 
+* OECD 국가들의 Gini계수 읽어들이기. 세전과 세후로 구분. 자료구조로 인하여 `sep = "\t"`을 사용한 것에 유의 
 
 ```{r}
-Gini_b_tax <- read.table(file="../data/Gini_before_tax.txt", header = FALSE, sep = "\t")
-Gini_a_tax <- read.table(file="../data/Gini_after_tax.txt", header = FALSE, sep = "\t")
+library(knitr)
+library(magrittr)
+library(printr)
+Gini_b_tax <- read.table(file="../data/Gini_before_tax.txt", 
+                         header = FALSE, 
+                         sep = "\t")
+Gini_a_tax <- read.table(file="../data/Gini_after_tax.txt", 
+                         header = FALSE, 
+                         sep = "\t")
 str(Gini_b_tax)
 str(Gini_a_tax)
 ```
@@ -19,7 +26,9 @@ str(Gini_a_tax)
 * 2000년 후반 자료만 모아서 새로운 data frame 구성
 
 ```{r}
-(Gini_b_a<-data.frame(Country = Gini_b_tax$V1, Before = Gini_b_tax$V8, After = Gini_a_tax$V8))
+(Gini_b_a<-data.frame(Country = Gini_b_tax$V1, 
+                      Before = Gini_b_tax$V8, 
+                      After = Gini_a_tax$V8))
 ```
 
 * 세전과 세후의 Gini 계수 차이를 개선도(Improvement)라고 명명.
@@ -47,7 +56,7 @@ Gini_b_a[order(Gini_b_a$Improvement, decreasing = TRUE), ]
 
 * 세전 세후 Gini 계수를 시각적으로 비교하려면 `barplot()`이 적합함. `barplot(height, ...)`에서 `height`가 매트릭스일 때는 막대는 열의 각 요소를 크기대로 쌓아놓은 형태가 되므로, `t()`를 이용하여 transpose시킨 후 `barplot()`을 적용. 또한 transpose를 시켜도 여전히 data frame 이기 때문에 매트릭스로 강제 변환함. 세전, 세후 비교를 위해 쌓아 놓기 보다는 옆에 늘어세우는 게 나으므로  `beside=TRUE`를 적용하고 각 막대의 이름으로 나라이름을 사용. 
 
-```{r fig.width=10, fig.height=5}
+```{r fig.width = 10, fig.height = 5}
 barplot(as.matrix(t(Gini_b_a[, 2:3])), beside = TRUE, names.arg = Gini_b_a$Country)
 ```
 
@@ -79,7 +88,10 @@ barplot(as.matrix(t(Gini_b_a[o_improvement, 2:3])),
 old_par <- par(no.readonly=TRUE)
 par("mai")
 par("mai"= c(1.5, 0.8, 0.8, 0.4))
-barplot(as.matrix(t(Gini_b_a[o_improvement, 2:3])), beside=TRUE, names.arg=Gini_b_a$Country[o_improvement], las=2)
+barplot(as.matrix(t(Gini_b_a[o_improvement, 2:3])), 
+        beside = TRUE, 
+        names.arg = Gini_b_a$Country[o_improvement], 
+        las = 2)
 par(old_par)
 ```
 
@@ -213,17 +225,22 @@ str(Gini_b_a_order_melt)
 ```{r, fig.width=7, fig.height=9}
 ggplot(data = Gini_b_a_order_melt, 
        mapping = aes(x = Country_order, y = Gini_Coef, fill = Tax)) + 
-  geom_bar(stat = "identity", position = "dodge") +
+  geom_bar(stat = "identity", position = "dodge", na.rm = TRUE) +
+  geom_hline(yintercept = 0.4, color = "red", linetype = 3, size = 1) +
+  scale_fill_brewer(type = "qual", palette = "Paired") +
+  labs(title = "OECD Gini Coefficient", 
+       subtitle = "Before and After Tax", 
+       y = "Gini Coefficient") +
+  theme(plot.title = element_text(size = 15, hjust = 0.5),
+        plot.subtitle = element_text(size = 10, hjust = 0.5)) +
 coord_flip()
 ```
 
 * 한글 제목 등의 세부 작업은 차후에
 
 
-뒷 마무리
-----------
+#### 뒷 마무리
 
 ```{r}
-save(file = "Gini_OECD1801.RData", list = ls())
-# savehistory("Gini_OECD102.Rhistory")
+save.image(file = "Gini_OECD1801.RData")
 ```
