@@ -21,6 +21,7 @@ Gini_a_tax <- read.table(file="../data/Gini_after_tax.txt",
                          sep = "\t")
 str(Gini_b_tax)
 str(Gini_a_tax)
+lapply(list(Gini_b_tax, Gini_a_tax), str)
 ```
 
 * 2000년 후반 자료만 모아서 새로운 data frame 구성
