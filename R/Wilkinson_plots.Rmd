@@ -1,0 +1,335 @@
+---
+title: "Income Inequality vs Index of Health and Social Problems"
+author: "coop711"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+## Data Reading
+
+Equality Trust에서 기부금을 받고 제공하는 두 종류의 자료 중 23개 국가의 각종 지표를 비교한 자료에 [World Bank에서 발표하는 GDP자료](https://en.wikipedia.org/wiki/List_of_countries_by_GDP_(PPP)_per_capita)를 추가한 자료를 data 단계에서 읽어들이고 필요한 부분만 정리한 `RData`파일을 읽어들이면,
+
+```{r}
+library(magrittr)
+library(knitr)
+load("Inequality_Index_HS.RData")
+# data_full <- read.csv("../data/international-inequality_GDP.csv", stringsAsFactors = FALSE)
+# data_full <- read.csv("../data/international-inequality_GDP.csv", stringsAsFactors = TRUE)
+data_full %>% str
+data_21 %>% str
+```
+
+## Plots
+
+### Barplots for Income Inequalities
+
+```{r, fig.width = 12, fig.height = 8}
+# par(mai = c(2.0, 0.8, 0.8, 0.4) + 0.2)
+(fifth <- data_21$Income.inequality)
+barplot(fifth)
+```
+
+```{r, fig.width = 12, fig.height = 8}
+(Country <- data_21$Country)
+barplot(fifth, names.arg = Country)
+```
+
+```{r, fig.width = 12, fig.height = 8}
+(o.fifth <- order(fifth))
+data.frame(Country, fifth, o.fifth, fifth[o.fifth], Country[o.fifth])
+rev.o.fifth <- order(fifth, decreasing = TRUE)
+data.frame(Country, fifth, o.fifth, rev.o.fifth, fifth[rev.o.fifth], Country[rev.o.fifth])
+barplot(fifth[o.fifth])
+```
+
+```{r, fig.width = 12, fig.height = 8}
+barplot(fifth[o.fifth], names.arg = Country[o.fifth])
+```
+
+```{r}
+N <- nrow(data_21)
+par(mfrow = c(1, 2))
+pie(rep(1, N), col = rainbow(N, start = 1/6, end = 1))
+pie(rep(1, N), col = rainbow(N, start = 0, end = 1/6))
+par(mfrow = c(1, 1))
+```
+
+```{r, barplot of 5th ratios 5th, fig.width = 12, fig.height = 8}
+barplot(fifth[o.fifth], names.arg = Country[o.fifth],  col = rainbow(N, start = 1/6, end = 1))
+```
+
+```{r, barplot of 5th ratios 6th, fig.width = 12, fig.height = 8}
+barplot(fifth[o.fifth], names.arg = Country[o.fifth],  col = rainbow(N, start = 1/6, end = 1), las = 2)
+```
+
+```{r, barplot of 5th ratios text annotation, fig.width = 12, fig.height = 8}
+b.fifth <- barplot(fifth[o.fifth], names.arg = Country[o.fifth], col = rainbow(N, start = 1/6, end = 1), ylim = c(0, 10), xpd = FALSE, las = 2)
+text(x = b.fifth, y = fifth[o.fifth] + 0.3, labels = format(fifth[o.fifth], digits = 3))
+# text(x = b.fifth, y = fifth[o.fifth], labels = format(fifth[o.fifth], digits = 3))
+# text(x = b.fifth[c(1, 11, 21)], y = fifth[o.fifth][c(1, 11, 21)] + 0.3, labels = format(fifth[o.fifth][c(1, 11, 21)], digits = 3))
+title(main = "Fifth Ratios of Selected Countries", cex.main = 2)
+```
+
+### Scatter Diagram 
+
+우선 소득불평등과 건강 및 사회문제 지표의 관계를 대략적으로 살펴보면,
+
+```{r, base plot}
+Index_inequality.df <- data_21[c("Income.inequality", "Index.HS")]
+str(Index_inequality.df)
+plot(Index_inequality.df)
+cor(Index_inequality.df)
+cor.1 <- cor(data_21["Income.inequality"], data_21["Index.HS"])
+cor.1
+```
+
+매우 높은 양의 상관관계(r = `r cor.1`) 가 관찰됨을 알 수 있다. 자주 사용하는 `data_21[c("Income.inequality", "Index.HS")]`를 간단한 R 오브젝트로 assign하여 반복 사용하고 있다. `cor()`에도 data frame을 사용하면 어떻게 되는지 다음 결과와 비교해 보자.
+
+```{r, cor data frame}
+cor(Index_inequality.df)
+```
+
+각 점이 어느 나라를 나타내는지 표시하기 위하여 `text()` 를 활용하자. 동그라미 대신 까만 점으로 표시하고, 나라 이름을 올려보자. 
+
+```{r, fig.width = 8, fig.height = 6}
+(Country <- data_21[, "Country"])
+(Country.2 <- data_21["Country"])
+(Country.3 <- data_21["Country"]$Country)
+(Country.4 <- data_21[["Country"]])
+str(Country)
+str(Country.2)
+str(Country.3)
+str(Country.4)
+```
+
+<P style = "page-break-before:always">
+
+```{r, text for countries, fig.width = 8, fig.height = 6 }
+plot(Index_inequality.df, pch = 20)
+text(Index_inequality.df, labels = Country)
+```
+
+text label의 위치 기본값은 바로 점 위임을 알 수 있다. 위치 선정에 가능한 값들을 넣어보자. 
+
+```{r, pos = 1, fig.width = 8, fig.height = 6}
+plot(Index_inequality.df, pch = 20)
+text(Index_inequality.df, labels = Country, pos = 1)
+```
+
+```{r, pos = 2,  fig.width = 8, fig.height = 6}
+plot(Index_inequality.df, pch = 20)
+text(Index_inequality.df, labels = Country, pos = 2)
+```
+
+```{r, pos = 3, fig.width = 8, fig.height = 6}
+plot(Index_inequality.df, pch = 20)
+text(Index_inequality.df, labels = Country, pos = 3)
+```
+
+```{r, pos = 4, fig.width = 8, fig.height = 6}
+plot(Index_inequality.df, pch = 20)
+text(Index_inequality.df, labels = Country, pos = 4)
+```
+
+우선 x-축과 y-축의 범위를 `xlim = c(3, 9), ylim = c(-1.5, 2.5)`로 하여 미국과 일본의 라벨이 도표 밖으로 나가지 않게 하자. `pos = 4`로 하고 `cex = 0.8`로 하여 글자 크기를 줄여보면, 
+
+```{r, xlim-ylim-cex, fig.width = 8, fig.height = 6}
+plot(Index_inequality.df, pch = 20, xlim = c(3, 9), ylim = c(-1.5, 2.5))
+text(Index_inequality.df, labels = Country, pos = 4, cex = 0.8)
+```
+
+오스트리아, 덴마크, 독일, 네덜란드의 라벨만 점 왼편에 위치시켜 보자. 각 인덱스를 찾아보면,
+
+```{r, label left}
+which(Country %in% c("Austria", "Denmark", "Germany", "Netherlands"))
+text.left <- which(Country %in% c("Austria", "Denmark", "Germany", "Netherlands"))
+text.left
+text.right <- setdiff(1:nrow(data_21), text.left)
+text.right
+pos.text <- ifelse(1:nrow(data_21) %in% text.left, 2, 4)
+```
+
+```{r, plot labels adjusted, fig.width = 8, fig.height = 6}
+plot(Index_inequality.df, pch = 20, col = "red", xlim = c(3, 9), ylim = c(-1.5, 2.5))
+text(Index_inequality.df, labels = Country, pos = pos.text, cex = 0.8)
+```
+
+독일의 라벨을 위로 붙이면 보기가 나아질 것으로 생각되므로,
+
+```{r, points for germany}
+which(Country %in% "Germany")
+text.up <- which(Country %in% "Germany")
+text.up
+text.left <- setdiff(1:nrow(data_21), c(text.right, text.up))
+text.left
+pos.text <- ifelse(1:nrow(data_21) %in% text.up, 3, ifelse(1:nrow(data_21) %in% text.left, 2, 4))
+pos.text
+```
+
+이제 조정된 text 외에 x-축과 y-축에 적절한 라벨과 메인 타이틀을 넣어보자.
+
+```{r, labels and title, fig.width = 8, fig.height = 6}
+plot(Index_inequality.df, pch = 20, col = "red", xlim = c(3, 9), ylim = c(-1.5, 2.5), ann = FALSE)
+text(Index_inequality.df, labels = Country, pos = pos.text, cex = 0.8)
+main.title <- "Income Inequality vs Index of Health and Social Problems" 
+x.lab <- "Income Inequality (5th Ratio)"
+y.lab <- "Index of Health and Social Problems"
+title(main = main.title, xlab = x.lab, ylab = y.lab)
+```
+
+건강 및 사회문제 지표의 경우 어느 방향이 좋은지 알 수 없으므로 친절하게 도표의 주변에(margin)에 알려주려면,
+
+```{r, mtext, fig.width = 8, fig.height = 6}
+plot(Index_inequality.df, pch = 20, col = "red", xlim = c(3, 9), ylim = c(-1.5, 2.5), ann = FALSE)
+text(Index_inequality.df, labels = Country, pos = pos.text, cex = 0.8)
+main.title <- "Income Inequality vs Index of Health and Social Problems" 
+x.lab <- "Income Inequality (5th Ratio)"
+y.lab <- "Index of Health and Social Problems"
+title(main = main.title, xlab = x.lab, ylab = y.lab)
+mtext(c("Better", "Worse"), side = 2, at = c(-1.8, 2.8), las = 1)
+```
+
+상관계수를 텍스트로 그림 안에 넣어주고 여기까지 작업한 내용을 별도의 파일로 저장해 놓으려면,
+
+```{r, correlation and separate file, fig.width = 8, fig.height = 6}
+plot(Index_inequality.df, pch = 20, col = "red", xlim = c(3, 9), ylim = c(-1.5, 2.5), ann = FALSE)
+text(Index_inequality.df, labels = Country, pos = pos.text, cex = 0.8)
+main.title <- "Income Inequality vs Index of Health and Social Problems" 
+x.lab <- "Income Inequality (5th Ratio)"
+y.lab <- "Index of Health and Social Problems"
+title(main = main.title, xlab = x.lab, ylab = y.lab)
+mtext(c("Better", "Worse"), side = 2, at = c(-1.8, 2.8), las = 1)
+text(x = 5, y = 1.5, labels = paste("r =", round(cor.1, digits = 2)), col = "blue")
+# dev.copy(png, file = "../pics/inequality_health_social_en_72dpi.png", width = 640, height = 480)
+# dev.off()
+```
+
+선형회귀선을 추가하여 대체적인 추세를 보려면 `lm()`을 이용하되, `x`, `y`의 순서를 제대로 바꿔야 함에 유의.
+
+```{r, lm to abline, fig.width = 8, fig.height = 6}
+plot(Index_inequality.df, pch = 20, col = "red", xlim = c(3, 9), ylim = c(-1.5, 2.5), ann = FALSE)
+text(Index_inequality.df, labels = Country, pos = pos.text, cex = 0.8)
+main.title <- "Income Inequality vs Index of Health and Social Problems" 
+x.lab <- "Income Inequality (5th Ratio)"
+y.lab <- "Index of Health and Social Problems"
+title(main = main.title, xlab = x.lab, ylab = y.lab)
+mtext(c("Better", "Worse"), side = 2, at = c(-1.8, 2.8), las = 1)
+text(x = 5, y = 1.5, labels = paste("r =", round(cor.1, digits = 2)))
+lm.ineq <- lm(Index.HS ~ Income.inequality, data = Index_inequality.df)
+# lm.ineq <- lm(Index_inequality.df[2:1])
+abline(lm.ineq$coef, col = "blue")
+```
+
+GDP와 건강 및 사회문제 지수
+
+```{r, GDP vs Index.HS, fig.width = 10, fig.height = 7.5}
+Index_GDP.df <- data_21[c("GDP_WB", "Index.HS")]
+text.left.2 <- which(Country %in% c("Canada", "Belgium", "Australia"))
+text.right.2 <- setdiff(1:nrow(data_21), c(text.left.2))
+pos.text.2 <- ifelse(1:nrow(data_21) %in% text.left.2, 2, 4)
+plot(Index_GDP.df, pch = 20, col = "red", xlim = c(25000, 70000), ylim = c(-1.5, 2.5), xaxt = "n", ann = FALSE)
+axis(side = 1, at = seq(30000, 70000, by = 10000), labels = paste(3:7, "만", sep = ""))
+text(Index_GDP.df, labels = Country, pos = pos.text.2, cex = 0.8)
+cor.2 <- cor(Index_GDP.df["GDP_WB"], Index_GDP.df["Index.HS"])
+text(x = 40000, y = 2, labels = paste("r =", round(cor.2, digits = 2)), cex = 1.2)
+main.title.2 <- "GDP vs Index of Health and Social Problems"
+x.lab.2 <- "GDP (Thousand Dollars)"
+y.lab.2 <- "Index of Health and Social Problems"
+title(main = main.title.2, xlab = x.lab.2, ylab = y.lab.2)
+mtext(c("Better", "Worse"), side = 2, at = c(-1.8, 2.8), las = 1)
+# dev.copy(png, file = "../pics/GDP_health_social_en_72dpi.png", width = 640, height = 480)
+# dev.off()
+```
+
+### 한글화
+
+국가명을 한글로 만들어 `Country.kr`로 저장하자.
+
+```{r, Korean}
+Country.kr<-c("호주", "오스트리아", "벨기에", "캐나다", "덴마크",
+"핀란드", "프랑스", "독일", "그리스", "아일랜드", "이탈리아",
+"일본", "네덜란드", "뉴질랜드", "노르웨이", "포르투갈",
+"스페인", "스웨덴", "스위스", "영국", "미국")
+```
+
+```{r, Korean names, fig.width = 8, fig.height = 6}
+# library(extrafont)
+par(family = "HCR Dotum LVT")
+plot(Index_inequality.df, pch = 20, col = "red", xlim = c(3, 9), ylim = c(-1.5, 2.5), ann = FALSE)
+text(Index_inequality.df[text.right, ], labels = Country.kr[text.right], pos = 4, cex = 0.8)
+text(Index_inequality.df[text.left, ], labels = Country.kr[text.left], pos = 2, cex = 0.8)
+text(Index_inequality.df[text.up, ], labels = Country.kr[text.up], pos = 3, cex = 0.8)
+main.title.kr <- "소득불평등과 건강 및 사회문제 지수"
+x.lab.kr <- "소득불평등(소득5분위계수)"
+y.lab.kr <- "건강 및 사회문제 지수"
+title(main = main.title.kr, xlab = x.lab.kr, ylab = y.lab.kr)
+mtext(c("좋음", "나쁨"), side = 2, at = c(-1.8, 2.8), las = 1)
+```
+
+상관계수 r = `r round(cor.1, digits = 2)` 를 도표 안에 표시하고 별도의 파일로 출력하려면,
+
+```{r fig.width=8, fig.height=6}
+par(family = "HCR Dotum LVT")
+plot(Index_inequality.df, pch = 20, col = "red", xlim = c(3, 9), ylim = c(-1.5, 2.5), ann = FALSE)
+text(Index_inequality.df, labels = Country.kr, pos = pos.text, cex = 0.8)
+main.title.kr <- "소득불평등과 건강 및 사회문제 지수"
+x.lab.kr <- "소득불평등(소득5분위계수)"
+y.lab.kr <- "건강 및 사회문제 지수"
+title(main = main.title.kr, xlab = x.lab.kr, ylab = y.lab.kr)
+mtext(c("좋음", "나쁨"), side = 2, at = c(-1.8, 2.8), las = 1)
+text(x = 5, y = 1.5, labels = paste("r =", round(cor(Index_inequality.df[1], Index_inequality.df[2]), digits = 2)))
+# dev.copy(png, file = "../pics/inequality_health_social_72dpi.png", width = 640, height = 480)
+# dev.off()
+```
+
+선형회귀선을 이번에는 `lsfit`을 이용하여 삽입
+
+```{r, simple regression line, fig.width = 8, fig.height = 6}
+par(family = "HCR Dotum LVT")
+plot(Index_inequality.df, pch = 20, col = "red", xlim = c(3, 9), ylim = c(-1.5, 2.5), ann = FALSE)
+text(Index_inequality.df, labels = Country.kr, pos = pos.text, cex = 0.8)
+main.title.kr <- "소득불평등과 건강 및 사회문제 지수"
+x.lab.kr <- "소득불평등(소득5분위계수)"
+y.lab.kr <- "건강 및 사회문제 지수"
+title(main = main.title.kr, xlab = x.lab.kr, ylab = y.lab.kr)
+mtext(c("좋음", "나쁨"), side = 2, at = c(-1.8, 2.8), las = 1)
+text(x = 5, y = 1.5, labels = paste("r =", round(cor(Index_inequality.df[1], Index_inequality.df[2]), digits = 2)))
+lsfit.ineq <- lsfit(x = Index_inequality.df[, 1], y = Index_inequality.df[, 2])
+abline(lsfit.ineq$coefficients, col = "blue")
+```
+
+GDP와의 관계
+
+```{r, GDP vs Index, fig.width = 12, fig.height = 9}
+par(family = "HCR Dotum LVT")
+Index_GDP.df <- data_21[c("GDP_WB", "Index.HS")]
+text.left.2 <- which(Country %in% c("Canada", "Belgium", "Australia"))
+text.right.2 <- setdiff(1:nrow(data_21), c(text.left.2))
+pos.text.2 <- ifelse(1:nrow(data_21) %in% text.left.2, 2, 4)
+plot(Index_GDP.df, pch = 20, col = "red", xlim = c(25000, 70000), ylim = c(-1.5, 2.5), xaxt = "n", ann = FALSE)
+axis(side = 1, at = seq(30000, 70000, by = 10000), labels = paste(3:7, "만", sep = ""))
+text(Index_GDP.df, labels = Country.kr, pos = pos.text.2, cex = 0.8)
+text(x = 40000, y = 2, labels = paste("r =", round(cor(Index_GDP.df[1], Index_GDP.df[2]), digits = 2)), cex = 1.2)
+main.title.2.kr <- "GDP와 건강 및 사회문제 지수"
+x.lab.2.kr <- "GDP(달러)"
+y.lab.2.kr <- "건강 및 사회문제 지수"
+title(main = main.title.2.kr, xlab = x.lab.2.kr, ylab = y.lab.2.kr)
+mtext(c("좋음", "나쁨"), side = 2, at = c(-1.8, 2.8), las = 1)
+# dev.copy(png, file = "../pics/GDP_health_social_72dpi.png", width = 640, height = 480)
+# dev.off()
+```
+
+<!--
+```{r, save}
+save.image(file = "Inequality_Index_HS_add.RData")
+```
+-->
+
+
+
+
+
+
+
+
+
