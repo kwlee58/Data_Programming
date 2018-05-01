@@ -23,50 +23,70 @@ data_21 %>% str
 
 ### Barplots for Income Inequalities
 
-```{r, fig.width = 12, fig.height = 8}
+```{r, fig.width = 12, fig.height = 6}
 # par(mai = c(2.0, 0.8, 0.8, 0.4) + 0.2)
-(fifth <- data_21$Income.inequality)
-barplot(fifth)
+data_21 %>% 
+  .$Income_inequality %>% 
+  barplot
 ```
 
-```{r, fig.width = 12, fig.height = 8}
-(Country <- data_21$Country)
-barplot(fifth, names.arg = Country)
+```{r, fig.width = 12, fig.height = 6}
+data_21 %>% 
+  .$Income_inequality %>% 
+  barplot(names.arg = data_21$Country)
 ```
 
-```{r, fig.width = 12, fig.height = 8}
-(o.fifth <- order(fifth))
-data.frame(Country, fifth, o.fifth, fifth[o.fifth], Country[o.fifth])
-rev.o.fifth <- order(fifth, decreasing = TRUE)
-data.frame(Country, fifth, o.fifth, rev.o.fifth, fifth[rev.o.fifth], Country[rev.o.fifth])
-barplot(fifth[o.fifth])
+```{r, fig.width = 12, fig.height = 6}
+o_fifth <- data_21 %>% .$Income_inequality %>% order
+b <- data_21 %>% 
+  .$Income_inequality %>% 
+  `[`(o_fifth) %>%
+  barplot(names.arg = data_21$Country %>% `[`(o_fifth))
 ```
 
-```{r, fig.width = 12, fig.height = 8}
-barplot(fifth[o.fifth], names.arg = Country[o.fifth])
-```
 
 ```{r}
-N <- nrow(data_21)
+N <- data_21 %>% nrow
 par(mfrow = c(1, 2))
 pie(rep(1, N), col = rainbow(N, start = 1/6, end = 1))
 pie(rep(1, N), col = rainbow(N, start = 0, end = 1/6))
 par(mfrow = c(1, 1))
 ```
 
-```{r, barplot of 5th ratios 5th, fig.width = 12, fig.height = 8}
-barplot(fifth[o.fifth], names.arg = Country[o.fifth],  col = rainbow(N, start = 1/6, end = 1))
+```{r, barplot of 5th ratios 5th, fig.width = 12, fig.height = 6}
+data_21 %>% 
+  .$Income_inequality %>% 
+  `[`(o_fifth) %>%
+  barplot(names.arg = data_21$Country %>% `[`(o_fifth),
+          col = rainbow(N, start = 1/6, end = 1))
 ```
 
-```{r, barplot of 5th ratios 6th, fig.width = 12, fig.height = 8}
-barplot(fifth[o.fifth], names.arg = Country[o.fifth],  col = rainbow(N, start = 1/6, end = 1), las = 2)
+```{r, barplot of 5th ratios 6th, fig.width = 12, fig.height = 6}
+data_21 %>% 
+  .$Income_inequality %>% 
+  `[`(o_fifth) %>%
+  barplot(names.arg = data_21$Country %>% `[`(o_fifth),
+          col = rainbow(N, start = 1/6, end = 1),
+          las = 2)
 ```
 
-```{r, barplot of 5th ratios text annotation, fig.width = 12, fig.height = 8}
-b.fifth <- barplot(fifth[o.fifth], names.arg = Country[o.fifth], col = rainbow(N, start = 1/6, end = 1), ylim = c(0, 10), xpd = FALSE, las = 2)
-text(x = b.fifth, y = fifth[o.fifth] + 0.3, labels = format(fifth[o.fifth], digits = 3))
-# text(x = b.fifth, y = fifth[o.fifth], labels = format(fifth[o.fifth], digits = 3))
-# text(x = b.fifth[c(1, 11, 21)], y = fifth[o.fifth][c(1, 11, 21)] + 0.3, labels = format(fifth[o.fifth][c(1, 11, 21)], digits = 3))
+```{r, barplot of 5th ratios text annotation, fig.width = 12, fig.height = 6}
+data_21 %>% 
+  .$Income_inequality %>% 
+  `[`(o_fifth) %>%
+  barplot(names.arg = data_21$Country %>% `[`(o_fifth),
+          col = rainbow(N, start = 1/6, end = 1),
+          ylim = c(0, 10),
+          las = 2)
+text(x = b, 
+     y = data_21 %>% 
+       .$Income_inequality %>% 
+       `[`(o_fifth) %>% 
+       `+`(0.3), 
+     labels = data_21 %>% 
+       .$Income_inequality %>% 
+       `[`(o_fifth) %>% 
+       format(digits = 3))
 title(main = "Fifth Ratios of Selected Countries", cex.main = 2)
 ```
 
@@ -75,15 +95,15 @@ title(main = "Fifth Ratios of Selected Countries", cex.main = 2)
 우선 소득불평등과 건강 및 사회문제 지표의 관계를 대략적으로 살펴보면,
 
 ```{r, base plot}
-Index_inequality.df <- data_21[c("Income.inequality", "Index.HS")]
+Index_inequality.df <- data_21[c("Income_inequality", "Index_HS")]
 str(Index_inequality.df)
 plot(Index_inequality.df)
 cor(Index_inequality.df)
-cor.1 <- cor(data_21["Income.inequality"], data_21["Index.HS"])
+cor.1 <- cor(data_21["Income_inequality"], data_21["Index_HS"])
 cor.1
 ```
 
-매우 높은 양의 상관관계(r = `r cor.1`) 가 관찰됨을 알 수 있다. 자주 사용하는 `data_21[c("Income.inequality", "Index.HS")]`를 간단한 R 오브젝트로 assign하여 반복 사용하고 있다. `cor()`에도 data frame을 사용하면 어떻게 되는지 다음 결과와 비교해 보자.
+매우 높은 양의 상관관계(r = `r cor.1`) 가 관찰됨을 알 수 있다. 자주 사용하는 `data_21[c("Income_inequality", "Index_HS")]`를 간단한 R 오브젝트로 assign하여 반복 사용하고 있다. `cor()`에도 data frame을 사용하면 어떻게 되는지 다음 결과와 비교해 보자.
 
 ```{r, cor data frame}
 cor(Index_inequality.df)
@@ -215,22 +235,22 @@ y.lab <- "Index of Health and Social Problems"
 title(main = main.title, xlab = x.lab, ylab = y.lab)
 mtext(c("Better", "Worse"), side = 2, at = c(-1.8, 2.8), las = 1)
 text(x = 5, y = 1.5, labels = paste("r =", round(cor.1, digits = 2)))
-lm.ineq <- lm(Index.HS ~ Income.inequality, data = Index_inequality.df)
+lm.ineq <- lm(Index_HS ~ Income_inequality, data = Index_inequality.df)
 # lm.ineq <- lm(Index_inequality.df[2:1])
 abline(lm.ineq$coef, col = "blue")
 ```
 
 GDP와 건강 및 사회문제 지수
 
-```{r, GDP vs Index.HS, fig.width = 10, fig.height = 7.5}
-Index_GDP.df <- data_21[c("GDP_WB", "Index.HS")]
+```{r, GDP vs Index_HS, fig.width = 10, fig.height = 7.5}
+Index_GDP.df <- data_21[c("GDP_WB", "Index_HS")]
 text.left.2 <- which(Country %in% c("Canada", "Belgium", "Australia"))
 text.right.2 <- setdiff(1:nrow(data_21), c(text.left.2))
 pos.text.2 <- ifelse(1:nrow(data_21) %in% text.left.2, 2, 4)
 plot(Index_GDP.df, pch = 20, col = "red", xlim = c(25000, 70000), ylim = c(-1.5, 2.5), xaxt = "n", ann = FALSE)
 axis(side = 1, at = seq(30000, 70000, by = 10000), labels = paste(3:7, "만", sep = ""))
 text(Index_GDP.df, labels = Country, pos = pos.text.2, cex = 0.8)
-cor.2 <- cor(Index_GDP.df["GDP_WB"], Index_GDP.df["Index.HS"])
+cor.2 <- cor(Index_GDP.df["GDP_WB"], Index_GDP.df["Index_HS"])
 text(x = 40000, y = 2, labels = paste("r =", round(cor.2, digits = 2)), cex = 1.2)
 main.title.2 <- "GDP vs Index of Health and Social Problems"
 x.lab.2 <- "GDP (Thousand Dollars)"
@@ -246,7 +266,7 @@ mtext(c("Better", "Worse"), side = 2, at = c(-1.8, 2.8), las = 1)
 국가명을 한글로 만들어 `Country.kr`로 저장하자.
 
 ```{r, Korean}
-Country.kr<-c("호주", "오스트리아", "벨기에", "캐나다", "덴마크",
+Country.kr <- c("호주", "오스트리아", "벨기에", "캐나다", "덴마크",
 "핀란드", "프랑스", "독일", "그리스", "아일랜드", "이탈리아",
 "일본", "네덜란드", "뉴질랜드", "노르웨이", "포르투갈",
 "스페인", "스웨덴", "스위스", "영국", "미국")
@@ -302,7 +322,7 @@ GDP와의 관계
 
 ```{r, GDP vs Index, fig.width = 12, fig.height = 9}
 par(family = "HCR Dotum LVT")
-Index_GDP.df <- data_21[c("GDP_WB", "Index.HS")]
+Index_GDP.df <- data_21[c("GDP_WB", "Index_HS")]
 text.left.2 <- which(Country %in% c("Canada", "Belgium", "Australia"))
 text.right.2 <- setdiff(1:nrow(data_21), c(text.left.2))
 pos.text.2 <- ifelse(1:nrow(data_21) %in% text.left.2, 2, 4)
