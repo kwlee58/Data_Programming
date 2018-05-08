@@ -184,10 +184,10 @@ par(old_par)
 
 * 범례 및 메인 타이틀 추가. 시행착오를 거쳐 구한 좌표에 유의할 것.
 
-```{r fig.width = 5, fig.height = 8}
+```{r fig.width = 6, fig.height = 8}
 old_par <- par(no.readonly = TRUE)
 par("mai")
-par("mai"= c(1.0, 1.5, 0.8, 0.8))
+par("mai"= c(1.0, 1.5, 0.8, 1.5))
 Gini_b_a %>% 
   .[o_improvement_2, 2:3] %>% 
   t %>% 
@@ -195,7 +195,7 @@ Gini_b_a %>%
   barplot(beside = TRUE, horiz = TRUE,
           names.arg = Gini_b_a$Country[o_improvement_2], 
           legend.text = c("Before Tax", "After Tax"), 
-          args.legend = list(x = 0.67, y = 110), 
+          args.legend = list(x = 0.75, y = 110), 
           las = 1) 
 abline(v = 0.4, lty = 2, col = "red")
 title(main = "Gini Coefficients of OECD Countries")
@@ -212,12 +212,12 @@ par(old_par)
 
 ```{r}
 library(reshape2)
-(Gini_b_a_melt <- melt(Gini_b_a, 
-                       id.vars = "Country", 
-                       measure.vars = c("Before", "After"), 
-                       variable.name = "Tax", 
-                       value.name = "Gini_Coef"))
-str(Gini_b_a_melt)
+Gini_b_a_melt <- Gini_b_a %>% 
+  melt(id.vars = "Country", 
+       measure.vars = c("Before", "After"), 
+       variable.name = "Tax", 
+       value.name = "Gini_Coef")
+Gini_b_a_melt %>% str
 ```
 
 * `ggplot2` 등록 후 `geom_bar()`
@@ -233,13 +233,14 @@ ggplot(data = Gini_b_a_melt,
 * 개선도 순서대로 늘어세우려면 그 순서를 `level`로 갖는 `factor`로 만들어야함. `o_improvement`가 내림차순으로 정리되어 있는 순서이기 때문에 `rev(o_improvement)`는 올림차순으로 정리되어 있는 순서임. 따라서,
 
 ```{r}
-Gini_b_a$Country_order <- factor(Gini_b_a$Country, 
-                                 levels = Gini_b_a$Country[rev(o_improvement)])
-Gini_b_a_order_melt <- melt(Gini_b_a, 
-                            id.vars = "Country_order", 
-                            measure.vars = c("Before", "After"), 
-                            variable.name = "Tax", 
-                            value.name = "Gini_Coef")
+Gini_b_a$Country_order <- Gini_b_a$Country %>%
+  factor(levels = .[o_improvement %>% rev])
+Gini_b_a_order_melt <- Gini_b_a %>% 
+  melt(id.vars = "Country_order", 
+       measure.vars = c("Before", "After"), 
+       variable.name = "Tax", 
+       value.name = "Gini_Coef")
+                            
 str(Gini_b_a_order_melt)
 ```
 
