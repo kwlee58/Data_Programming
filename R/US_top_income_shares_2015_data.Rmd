@@ -12,7 +12,14 @@ output: html_document
 ```{r, data preparation, message = FALSE, echo = FALSE, results = 'hide'}
 options(digits = 3)
 library(xlsx)
-US_top_income_shares_15 <- read.xlsx("../data/TabFig2015prel.xlsx", sheetIndex = 9, sheetName = "Table A3", startRow = 6, endRow = 108, colIndex = c(1:7, 9:13), colClasses = c("integer", rep("numeric", 12)), header = FALSE)
+US_top_income_shares_15 <- read.xlsx("../data/TabFig2015prel.xlsx",
+                                     sheetIndex = 9, 
+                                     sheetName = "Table A3", 
+                                     startRow = 6, 
+                                     endRow = 108, 
+                                     colIndex = c(1:7, 9:13), 
+                                     colClasses = c("integer", rep("numeric", 12)),
+                                     header = FALSE)
 v_names <- c("Year", "P90_100", "P95_100", "P99_100", "P99.5_100", "P99.9_100", "P99.99_100", "P90_95", "P95_99", "P99_99.5", "P99.5_99.9", "P99.9_99.99")
 names(US_top_income_shares_15) <- v_names
 str(US_top_income_shares_15)

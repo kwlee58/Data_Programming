@@ -23,5 +23,5 @@ kable(prod_wage_2)
 ## Save
 
 ```{r, save, echo = FALSE}
-save.image("./prod_wage_RData")
+save.image("./prod_wage.RData")
 ```

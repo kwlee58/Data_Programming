@@ -100,7 +100,7 @@ text_lab <- end_df %>%
 
 ```{r, echo = TRUE, fig.width = 8, fig.height = 6}
 (g4 <- g3 +
-  scale_colour_manual(values = c("blue", "cyan")) + 
+  scale_colour_manual(values = c("cyan", "blue")) + 
   scale_x_continuous(breaks = c(1948, seq(1960, 2010, by = 10), 2014), 
                      labels = c(1948, seq(1960, 2010, by = 10), 2014)) +
   labs(title = main_title, x = x_lab, y = y_lab) + 
@@ -156,7 +156,7 @@ y2007.df <- subset(prod_wage_2_melt, Year == 2007)
 blues_pal <- brewer.pal(9, "Blues")
 (h4 <- h3 +
 #   scale_color_manual(values = blues_pal[c(9, 6, 3)]) +
-  scale_colour_manual(values = c("blue", "deepskyblue", "cyan")) + 
+  scale_colour_manual(values = c("cyan", "deepskyblue", "blue")) + 
   scale_x_continuous(breaks = c(1973, seq(1980, 2010, by = 10), 2014), 
                      labels = c(1973, seq(1980, 2010, by = 10), 2014)) +
   labs(title = main_title_2, x = x_lab, y = y_lab_2) + 
