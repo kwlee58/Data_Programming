@@ -23,14 +23,23 @@ load("US_top_income_shares_vs_tax_rates_2015.RData")
 # png(file = "../pics/US_Top_Income_Share_vs_MTR_72dpi_en.png", width = 864, height = 486)
 # png(file = "../pics/US_Top_Income_Share_vs_MTR_300dpi_en.png", width = 1280, height = 720)
 par(mar = c(5, 6, 4, 6) + 0.1)
-plot(P99_100 ~ Year, data = top_income_tax, type = "b", pch = 17, axes = FALSE, ann = FALSE, xlim = c(1910, 2020), ylim = c(5, 25))
+plot(P99_100 ~ Year, data = top_income_tax, 
+     type = "b", pch = 17, axes = FALSE, ann = FALSE, 
+     xlim = c(1910, 2020), ylim = c(5, 25))
 box()
-axis(side = 1, at = seq(1910, 2020, by = 10), labels = seq(1910, 2020, by = 10))
-axis(side = 2, at = seq(5, 25, by = 5), labels = seq(5, 25, by = 5), las = 1, ylab = "Top Income Share")
+axis(side = 1, at = seq(1910, 2020, by = 10), 
+     labels = seq(1910, 2020, by = 10))
+axis(side = 2, at = seq(5, 25, by = 5), 
+     labels = seq(5, 25, by = 5), las = 1, 
+     ylab = "Top Income Share")
 mtext("Top Income Share(%)", side = 2, line = 3)
 par(new = TRUE)
-plot(Marginal ~ Year, data = top_income_tax, type ="l", lty = 2, lwd = 2, col = "red", axes = FALSE, ann = FALSE, xlim = c(1910, 2020), ylim = c(0, 100))
-axis(side = 4, at = seq(0, 100, by = 20), labels = seq(0, 100, by = 20), las = 1)
+plot(Marginal ~ Year, data = top_income_tax, 
+     type ="l", lty = 2, lwd = 2, col = "red", 
+     axes = FALSE, ann = FALSE, 
+     xlim = c(1910, 2020), ylim = c(0, 100))
+axis(side = 4, at = seq(0, 100, by = 20), 
+     labels = seq(0, 100, by = 20), las = 1)
 mtext("Marginal Tax Rates(%)", side = 4, line = 3)
 title(main = "Top 1% Income Share and Top Marginal Tax Rate", xlab = "Year")
 text(x = 1980, y = 75, labels = "Top Marginal Tax Rates", cex = 1.2)

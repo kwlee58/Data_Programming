@@ -11,7 +11,6 @@ output: html_document
 
 ```{r, data preparation, message = FALSE, echo = FALSE, results = 'hide'}
 options(digits = 2)
-# library(xlsx)
 load("US_top_income_shares_2015.RData")
 ls()
 ```
@@ -21,7 +20,7 @@ ls()
 ```{r, data structure, echo = FALSE}
 library(knitr)
 str(US_top_income_shares_15)
-kable(US_top_income_shares_15)
+kable(format(US_top_income_shares_15, digits = 1, nsmall = 1), align = "r")
 ```
 
 이 중에서 소득 상위 10%(`P90_100`)를 상위 1%(`P99_100`), 차상위 4%(`P95_99`), 차차상위 5%(`P90_95`)로 나누어 그 몫의 변화를 살펴보자. 우선 밋밋하게 상위 1%의 소득 점유율 변화만 그려보면,
@@ -106,7 +105,7 @@ abline(v = seq(1910, 2020, by = 10), lty = 3)
 legend_text <- c("99-100%:$442,900 이상(2015년 기준)", "95-99%:$180,500-$442,900", "90-95%:$124,810-$180,500")
 legend(x = 1947, y = 25, legend = legend_text, pch = 17, col = c("black", "red", "blue"))
 main_title <- "미국 소득 상위 10%의 점유율 분할"
-title(main = main_title)
+title(main = main_title, cex.main = 2.0)
 ```
 
 <P style = "page-break-before:always">
@@ -210,7 +209,7 @@ x-축 눈금 위치 설정
 한글 테마 sourcing
 
 ```{r, theme_kr.r}
-source("./theme_kr.R")
+# source("./theme_kr.R")
 ls()
 ```
 
@@ -220,7 +219,7 @@ ls()
 
 ```{r, xlab and ylab, warning = FALSE, fig.width = 12, fig.height = 6.75}
 (g4 <- g3 + 
-   theme.kr + 
+#   theme.kr + 
    xlab("연도") + 
    ylab("소득점유(%)"))
 ```
@@ -230,7 +229,7 @@ ls()
 ```{r, ggtitle, warning = FALSE, fig.width = 12, fig.height = 6.75}
 (g5 <- g4 + 
    ggtitle(main_title) + 
-   theme(plot.title = element_text(size = 20)))
+   theme(plot.title = element_text(size = 20, hjust = 0.5)))
 ```
 
 <P style = "page-break-before:always">
@@ -296,6 +295,6 @@ colour 범례 없애기(colour 설정으로 나타나는 범례의 선 없애는
 
 ```{r, historical times.kr, warning = FALSE, fig.width = 12, fig.height = 6.75}
 (g13 <- g12 + 
-  annotate("text", x = c(1935, 1960, 2014), y = c(22, 8, 18), label = times_label, colour = "red", family = "HCR Dotum LVT", size = 8))
+  annotate("text", x = c(1935, 1960, 2014), y = c(22, 8, 18), label = times_label, colour = "red", family = "", size = 8))
 ```
 
