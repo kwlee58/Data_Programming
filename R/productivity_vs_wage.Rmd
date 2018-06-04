@@ -24,6 +24,7 @@ load("./prod_wage.RData")
 ### 순생산성과 시간당 보수
 
 ```{r, plot1, echo = TRUE, fig.width = 8, fig.height = 6}
+par(family = "HCR Dotum LVT")
 main_title <- "생산성과 시간당 보수(1948-2014)"
 x_lab <- "연도"
 y_lab <- "1948년 이래 누적된 변화(%)"
@@ -31,7 +32,6 @@ text_lab <- c("시간당 보수", "생산성")
 legend_lab <- c("1948-1973\n생산성 : 96.7%\n시간당 보수 : 91.3%", "1973-2014\n생산성 : 72.2%\n시간당 보수 : 9.2%")
 plot(Net_productivity ~ Year, data = prod_wage, type = "l", col = "blue", xlab = x_lab, ylab = y_lab, main = main_title, lwd = 5, ylim = c(-50, 300), las = 1)
 lines(Hourly_compensation ~ Year, data = prod_wage, col = "cyan", lwd = 5)
-par(family = "")
 main.title <- "생산성과 시간당 임금(1948-2014)"
 x.lab <- "연도"
 y.lab <- "1948년 이래 누적된 변화(%)"
@@ -61,8 +61,9 @@ dev.copy(png, file ="../pics/Productivity_vs_Wages_kr.png", width = 640, height 
 
 ### 순생산성과 평균 시간당 보수 및 중위 시간당 보수
 
+<<<<<<< HEAD
 ```{r, plot2, echo = TRUE, fig.width = 8, fig.height = 6}
-par(family = "")
+par(family = "HCR Dotum LVT")
 main_title_2 <- "생산성과 평균 보수 및 중위 보수(1973-2014)"
 y_lab_2 <- "1973년 이래 누적된 변화(%)"
 text_lab_2 <- c("(순)생산성", "평균\n시간당 보수", "중위\n시간당 보수")
