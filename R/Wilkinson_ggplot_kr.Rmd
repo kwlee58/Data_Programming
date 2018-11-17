@@ -50,7 +50,7 @@ g4 <- g3 +
 #  theme(axis.text.x = element_blank()) + 
   theme(axis.ticks.x = element_blank()) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
-  theme.kr
+  theme_kr
 # g4
 g5 <- g4 +
   geom_text(aes(x = Country_o, y = Income.inequality + 0.2, 
@@ -92,7 +92,7 @@ p1.2 <- p1.1 +
 # p1.2
 p2 <- p1.1 + 
   theme_bw() 
-#  theme.kr
+#  theme_kr
 p2
 ```
 
@@ -153,7 +153,7 @@ highest <- data_21$Income_inequality[Country == "USA"]
 ```
 
 ```{r, fig.width = 8, fig.height = 6}
-p7 <- p6 + theme.kr +
+p7 <- p6 + theme_kr +
   scale_x_continuous(name = x_lab, breaks = c(lowest, 4:8, highest), labels = c(lowest, 4:8, highest),
                      limits = c(3, 9)) +
   scale_y_continuous(name = y_lab, breaks = c(-1.5, -1:2, 2.5), 

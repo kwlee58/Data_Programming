@@ -181,7 +181,7 @@ title(main = "Gini Coefficients of OECD Countries")
 par(old_par)
 ```
 
-```{r}
+```{r echo = FALSE, fig.width = 5, fig.height = 10, eval = FALSE}
 asdf <- barplot(as.matrix(t(Gini_b_a[order(Gini_b_a$Improvement, na.last = FALSE), 2:3])), 
         beside = TRUE, 
         horiz = TRUE, 

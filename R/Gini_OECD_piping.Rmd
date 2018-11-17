@@ -247,17 +247,22 @@ str(Gini_b_a_order_melt)
 * `Gini_b_a_order_melt`의 `Country_order`가 개선도 올림차순으로 정리되어 있는 `factor`이기 때문에 그대로 활용하면 됨.
 
 ```{r, fig.width = 7, fig.height = 9}
+source("theme_kr.R")
 ggplot(data = Gini_b_a_order_melt, 
        mapping = aes(x = Country_order, y = Gini_Coef, fill = Tax)) + 
   geom_bar(stat = "identity", position = "dodge", na.rm = TRUE) +
   geom_hline(yintercept = 0.4, color = "red", linetype = 3, size = 1) +
-  scale_fill_brewer(type = "qual", palette = "Paired") +
-  labs(title = "OECD Gini Coefficient", 
-       subtitle = "Before and After Tax", 
-       y = "Gini Coefficient") +
+  theme_bw() +
+  theme_kr +
+  scale_fill_brewer(name = "", labels = c("세전", "세후"), type = "qual", palette = "Paired") +
+  labs(title = "OECD 지니계수", 
+#       subtitle = "세전 세후 비교", 
+       x = "개선도 순 나라 이름",
+       y = "지니계수") +
   theme(plot.title = element_text(size = 15, hjust = 0.5),
-        plot.subtitle = element_text(size = 10, hjust = 0.5)) +
+        plot.subtitle = element_text(family = "HCR Dotum LVT", size = 10, hjust = 0.5)) +
 coord_flip()
+ggsave(filename = "../pics/OECD_Gini_ggplot.png")
 ```
 
 * 한글 제목 등의 세부 작업은 차후에
