@@ -128,7 +128,7 @@ lines(Rate_1_z ~ Year, data = top_income_tax, type = "b", pch = 24, col = "black
 box()
 axis(side = 1, at = seq(1910, 2020, by = 10), labels = seq(1910, 2020, by = 10))
 y2_at <- c(0, z(Rate_99, c(100, 200, 300)), 1)
-labels2_at <- format(c(min(Rate_99), c(100, 200, 300), max(Rate_99)),
+labels2_at <- format(c(min(c(Rate_99, Rate_1)), c(100, 200, 300), max(c(Rate_99, Rate_1))),
                     digits = 2, nsmall = 1)
 axis(side = 2, at = y2_at, labels = labels2_at, las = 1)
 ylab_2 <- "평균 소득 (1913 = 100)"
@@ -163,7 +163,7 @@ lines(Rate_1_K_z ~ Year, data = top_income_tax, type = "b", pch = 24, col = "bla
 box()
 axis(side = 1, at = seq(1910, 2020, by = 10), labels = seq(1910, 2020, by = 10))
 y3_at <- c(0, z(Rate_99_K, seq(100, 500, by = 100)), 1)
-labels3_at <- format(c(min(Rate_99_K), seq(100, 500, by = 100), max(Rate_99_K)),
+labels3_at <- format(c(min(c(Rate_99_K, Rate_1_K)), seq(100, 500, by = 100), max(c(Rate_99_K, Rate_1_K))),
                     digits = 2, nsmall = 1)
 axis(side = 2, at = y3_at, labels = labels3_at, las = 1)
 mtext("평균 소득 (1913 = 100)", side = 2, line = 4)
