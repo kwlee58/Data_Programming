@@ -39,8 +39,8 @@ Rate_1_K <- US_income_averages_17[, "Top_1_K"] / US_income_averages_17[, "Top_1_
 선형변환에 사용할 함수 작성  `q = x`로 하면 변수의 관찰값 전체를 변환. `q`는 그 중 일부의 변환된 값을 보고자 할 때 입력
 
 ```{r}
-z <- function(x, q) {
-  (q - min(x)) / (max(x) - min(x))
+z <- function(x, q, a = min(x), b = max(x)) {
+  (q - a) / (b - a)
 }
 #> 0애서 1사이의 범위로 변환
 top_income_tax$P99_100_z <- top_income_tax$P99_100 %>%
@@ -48,14 +48,14 @@ top_income_tax$P99_100_z <- top_income_tax$P99_100 %>%
 top_income_tax$Marginal_z <- top_income_tax$Marginal %>%
   z(., .)
 Rate_99_z <- Rate_99 %>%
-  z(., .)
+  z(., ., a = min(c(Rate_99, Rate_1)), b = max(c(Rate_99, Rate_1)))
 Rate_1_z <- Rate_1 %>%
-  z(., .)
+  z(., ., a = min(c(Rate_99, Rate_1)), b = max(c(Rate_99, Rate_1)))
 Rate_99_K_z <- Rate_99_K %>%
-  z(., .)
+  z(., ., a = min(c(Rate_99_K, Rate_1_K)), b = max(c(Rate_99_K, Rate_1_K)))
 Rate_1_K_z <- Rate_1_K %>%
-  z(., .)
-kable(cbind(top_income_tax, Rate_99 = Rate_99, Rate_1 = Rate_1, Rate_99_K = Rate_99_K, Rate_1_K = Rate_1_K))
+  z(., ., a = min(c(Rate_99_K, Rate_1_K)), b = max(c(Rate_99_K, Rate_1_K)))
+kable(cbind(top_income_tax, Rate_99 = Rate_99_z, Rate_1 = Rate_1_z, Rate_99_K = Rate_99_K_z, Rate_1_K = Rate_1_K_z))
 M_melt <- melt(data.frame(top_income_tax[c("Year", "P99_100_z", "Marginal_z")]),
        id.vars = "Year", 
        measure.vars = c("P99_100_z", "Marginal_z"),
