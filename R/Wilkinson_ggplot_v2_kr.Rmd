@@ -14,7 +14,7 @@ library(tidyverse)
 library(knitr)
 library(RColorBrewer)
 options(width = 132)
-load("Inequality_Index_HS.RData")
+load("Inequality_Index_HS_v2.RData")
 dim(data_full)
 data_23 <- data_full[c("Country", "Income.inequality")]
 ```
@@ -27,8 +27,6 @@ data_23 <- data_full[c("Country", "Income.inequality")]
 
 ```{r, geom_bar}
 # par(mai = c(2.0, 0.8, 0.8, 0.4) + 0.02)
-# library(ggplot2)
-source("theme_kr.R")
 # colfunc <- colorRampPalette(brewer.pal(9, "YlOrRd"))
 # colfunc <- colorRampPalette(brewer.pal(11, "RdYlGn"))
 colfunc <- colorRampPalette(c("Yellow", "Green", "Blue", "Red"))
@@ -50,16 +48,17 @@ g3 <- g2 +
 g4 <- g3 + 
 #  theme(axis.text.x = element_blank()) + 
   theme(axis.ticks.x = element_blank()) +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
-  theme_kr
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) 
 # g4
 g5 <- g4 +
   geom_text(aes(x = Country_o, y = Income.inequality + 0.2, 
-                label = format(Income.inequality, digits = 3, nsmall = 2)), family = "HCR Dotum LVT") 
+                label = format(Income.inequality, digits = 3, nsmall = 2))) 
 # g5
 g6 <- g5 +
   labs(title = "소득 불평등(5분위배율)", x = "나라", y = "소득 5분위배율") +
-  theme(plot.title = element_text(hjust = 0.5, size = 15))
+  theme(plot.title = element_text(hjust = 0.5, size = 15, family = "KoPubWorldDotum Bold"),
+        axis.title.x = element_text(family = "KoPubWorldDotum Medium"),
+        axis.title.y = element_text(family = "KoPubWorldDotum Medium"))
 g6
 ```
 
@@ -84,16 +83,15 @@ cor_1 <- cor(data_21["Income_inequality"], data_21["Index_HS"])
 
 ```{r, fig.width = 6, fig.height = 4.5}
 p1 <- ggplot(data = Index_inequality_df, 
-             mapping = aes(x = Income_inequality, y = Index_HS, label = Country_kr))
-p1.1 <- p1 + 
+             mapping = aes(x = Income_inequality, y = Index_HS, label = Country_kr)) 
+p1_1 <- p1 + 
   geom_point(col = "red")
-# p1.1
-p1.2 <- p1.1 + 
-  geom_text(family = "HCR Dotum LVT")
-# p1.2
-p2 <- p1.1 + 
+p1_1
+p1_2 <- p1_1 + 
+  geom_text(family = "KoPubWorldDotum Light")
+p1_2
+p2 <- p1_1 + 
   theme_bw() 
-#  theme_kr
 p2
 ```
 
@@ -108,7 +106,7 @@ text_left <- which(Country %in% c("Austria", "Denmark", "Germany", "Netherlands"
 text_right <- setdiff(1:nrow(data_21), text_left)
 hjust_text <- ifelse(1:nrow(data_21) %in% text_left, "right", "left")
 p4 <- p2 + 
-  geom_text(hjust = hjust_text, family = "HCR Dotum LVT")
+  geom_text(hjust = hjust_text, family = "KoPubWorldDotum Medium")
 p4
 ```
 
@@ -123,7 +121,7 @@ text_left <- setdiff(1:nrow(data_21), c(text_right, text_up))
 vjust_text <- ifelse(1:nrow(data_21) %in% text_up, "bottom", "center")
 hjust_text <- ifelse(1:nrow(data_21) %in% text_up, "middle", hjust_text)
 p5 <- p2 + 
-  geom_text(hjust = hjust_text, vjust = vjust_text, family = "HCR Dotum LVT")
+  geom_text(hjust = hjust_text, vjust = vjust_text, family = "KoPubWorldDotum Medium")
 p5
 ```
 
@@ -136,7 +134,7 @@ nudge_y_text <- ifelse(vjust_text == "bottom", 0.05, 0.01)
 nudge_x_text <- ifelse(hjust_text == "middle", 0.01, ifelse(hjust_text == "right", -0.05, 0.05))
 p6 <- p2 + 
   geom_text(hjust = hjust_text, vjust = vjust_text, 
-            nudge_x = nudge_x_text, nudge_y = nudge_y_text, family = "HCR Dotum LVT")
+            nudge_x = nudge_x_text, nudge_y = nudge_y_text, family = "KoPubWorldDotum Medium")
 p6
 ```
 
@@ -154,14 +152,20 @@ highest <- data_21$Income_inequality[Country == "USA"]
 ```
 
 ```{r, warning = FALSE, fig.width = 8, fig.height = 6}
-p7 <- p6 + theme_kr +
-  scale_x_continuous(name = x_lab, breaks = c(lowest, 4:8, highest), labels = c(lowest, 4:8, highest),
+p7 <- p6 + 
+  scale_x_continuous(name = x_lab, 
+                     breaks = c(lowest, 4:8, highest), 
+                     labels = c(lowest, 4:8, highest),
                      limits = c(3, 9)) +
   scale_y_continuous(name = y_lab, breaks = c(-1.5, -1:2, 2.5), 
                      labels = c(expression("좋음" %down% ""), -1:2, expression("나쁨" %up% "")), 
                      limits = c(-1.5, 2.5)) +
-  labs(title = main_title, family = "HCR Dotum LVT") +
-  theme(plot.title = element_text(hjust = 0.5, vjust = -0.5, size = 15),
+  labs(title = main_title) +
+  theme(plot.title = element_text(hjust = 0.5, vjust = -0.5, 
+                                  size = 15, 
+                                  family = "KoPubWorldDotum Bold"),
+        axis.title.x = element_text(family = "KoPubWorldDotum Medium"),
+        axis.title.y = element_text(family = "KoPubWorldDotum Medium"),
         plot.margin = margin(1, 1, 1, 1, "cm")) 
 p7
 ```
@@ -177,7 +181,7 @@ p8 <- p7 +
            y = 1.5, 
            label = paste("상관계수 =", round(cor_1, digits = 2)), 
            size = 5,
-           family = "HCR Dotum LVT")
+           family = "KoPubWorldDotum Medium")
 p8
 ```
 
@@ -193,7 +197,7 @@ p9 <- p8 +
   geom_smooth(method = "loess", 
               se = FALSE, 
               colour = "blue")
-p9.2 <- p8 + 
+p9_2 <- p8 + 
   geom_smooth(method = "loess", 
               se = TRUE, 
               colour = "blue")
@@ -205,12 +209,12 @@ p9
 `se` 범위 추가 
 
 ```{r, warning = FALSE, fig.width = 8, fig.height = 6}
-p9.2
+p9_2
 ```
 
 ```{r, warning = FALSE}
 ggsave("../pics/Inequality_vs_HS_Index_ggplot.png", p9, dpi = 75)
-ggsave("../pics/Inequality_vs_HS_Index_ggplot_se.png", p9.2, dpi = 75)
+ggsave("../pics/Inequality_vs_HS_Index_ggplot_se.png", p9_2, dpi = 75)
 ```
 
 <P style = "page-break-before:always">
@@ -233,10 +237,10 @@ gd1 <- ggplot(data = Index_GDP_df,
               mapping = aes(x = GDP_WB, 
                             y = Index_HS, 
                             label = Country))
-gd1.1 <- gd1 + 
+gd1_1 <- gd1 + 
   geom_point(colour = "red")
-# gd1.1
-gd2 <- gd1.1 + 
+# gd1_1
+gd2 <- gd1_1 + 
   theme_bw()
 gd3 <- gd2 + 
   geom_text(hjust = hjust_text_2)
