@@ -60,7 +60,8 @@ kable(cbind(top_income_tax, Rate_99 = Rate_99_z, Rate_1 = Rate_1_z, Rate_99_K = 
 M_tbl <- top_income_tax %>%
   select(c("Year", "P99_100_z", "Marginal_z")) %>%
   as_tibble %>%
-  gather(key = "Variables", value = "Values", -Year) 
+  gather(key = "Variables", value = "Values", -Year) %>%
+  mutate(Variables = factor(Variables, levels = c("P99_100_z", "Marginal_z")))
 str(M_tbl)
 M_melt <- melt(data.frame(top_income_tax[c("Year", "P99_100_z", "Marginal_z")]),
        id.vars = "Year", 
@@ -72,7 +73,7 @@ Rates_tbl <- top_income_tax %>%
   select(c("Year", "Marginal_z")) %>%
   data.frame(Rate_99_z, Rate_1_z) %>%
   as_tibble %>%
-  gather(key = "Variables", value = "Values", -Year)
+  gather(key = "Variables", value = "Values", -Year) 
 str(Rates_tbl)
 Rates_melt <- melt(data.frame(top_income_tax[c("Year", "Marginal_z")], Rate_99_z, Rate_1_z),
        id.vars = "Year", 

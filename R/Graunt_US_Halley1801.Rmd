@@ -615,31 +615,29 @@ graunt_us_melt
 
 ## Structure of ggplot
 
-```{r, geom aes, fig.width = 6, fig.height = 6}
-(g1 <- ggplot() + 
-   geom_line(data = graunt, 
-             mapping = aes(x = graunt$x, y = graunt$xPo)))
+```{r, geom aes, fig.width = 4, fig.height = 4}
+(g1 <- ggplot(data = graunt,
+              mapping = aes(x = x, y = xPo_g)) + 
+   geom_line())
 ```
 
 <P style = "page-break-before:always">
 
-```{r, fig.width = 6, fig.height = 6}
+```{r, fig.width = 4, fig.height = 4}
 (g2 <- g1 +
-  geom_point(data = graunt, 
-             mapping = aes(x = graunt$x, y = graunt$xPo), 
-             shape = 21, fill = "white"))
+  geom_point(shape = 21, fill = "white"))
 ```
 
 <P style = "page-break-before:always">
 
-```{r, fig.width = 6, fig.height = 6}
+```{r, fig.width = 4, fig.height = 4}
 (g3 <- g2 +
   theme_bw())
 ```
 
 <P style = "page-break-before:always">
 
-```{r, fig.width = 6, fig.height = 6}
+```{r, fig.width = 4, fig.height = 4}
 (g4 <- g3 +
    xlab(x_lab) + 
    ylab(y_lab) + 
@@ -650,7 +648,7 @@ graunt_us_melt
 
 <P style = "page-break-before:always">
 
-```{r, fig.width = 6, fig.height = 6}
+```{r, fig.width = 4, fig.height = 4}
 (g5 <- g4 +
   geom_vline(xintercept = graunt$x, linetype = "dotted") +
   geom_hline(yintercept = 0, linetype = "dotted"))
@@ -658,12 +656,18 @@ graunt_us_melt
 
 <P style = "page-break-before:always">
 
-```{r, fig.width = 6, fig.height = 6}
-(pg4 <- g4 +
+```{r, fig.width = 4, fig.height = 4}
+(pg5 <- g5 +
   geom_polygon(data = graunt_poly, 
                mapping = aes(x = x, y = y), 
                alpha = 0.3, fill = "grey"))
 # ggsave("../pics/graunt_poly_ggplot.png", pg4)
+```
+
+```{r, fig.width = 8, fig.height = 12}
+library(gridExtra)
+g_graunt <- grid.arrange(g1, g2, g3, g4, g5, pg5, nrow = 3)
+ggsave(g_graunt, file = "../pics/graunt_ggplots.png", width = 8, height = 12)
 ```
 
 <P style = "page-break-before:always">
